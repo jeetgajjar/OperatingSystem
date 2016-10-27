@@ -1,4 +1,4 @@
-package io.github.kakorrhaphio.operatingsystem;
+package io.github.kakorrhaphio.operatingsystem.model;
 
 /**
  * Created by class on 10/13/16.
