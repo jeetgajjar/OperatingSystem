@@ -38,21 +38,8 @@ public class Scheduler {
     getArrival()
 
     setArrival()
-
-    getCPUTime()
-
-    setCPUTime()
      */
 
-
-
-    public static void insertPCB(PCB to_insert){
-        dumb_schedual.add(to_insert);
-    }
-
-    public static void removePCB(PCB to_remove){
-        dumb_schedual.remove(to_remove);
-    }
 
     public static long getCPUTime(){
         return time_adjustment + CPU.getClock();
