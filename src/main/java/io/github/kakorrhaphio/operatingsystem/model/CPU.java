@@ -8,5 +8,12 @@ public class CPU {
     execute()
     getClock()
      */
-    //From Tyler
+    public boolean execute(PCB process, int time){
+        boolean io = process.exec(time);
+        return io;
+    }
+
+    public long getClock(){
+        return System.currentTimeMillis();
+    }
 }
