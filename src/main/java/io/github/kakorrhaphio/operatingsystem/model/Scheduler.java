@@ -6,6 +6,19 @@ import java.util.ArrayList;
  * Created by class on 10/13/16.
  */
 public class Scheduler {
+    // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    private static ArrayList<PCB> dumb_schedual;
+    private static long time_adjustment;
+    private static Scheduler instance = new Scheduler();
+    private Scheduler() {
+        dumb_schedual = new ArrayList();
+        time_adjustment = 0;
+    }
+    public static Scheduler getInstance(){
+        return instance;
+    }
+    // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
+
     /*TODO
     insertPCB()
 
@@ -27,19 +40,8 @@ public class Scheduler {
 
     setCPUTime()
      */
-    private static Scheduler instance = new Scheduler;
-    private static ArrayList<PCB> dumb_schedual;
-    private static long time_adjustment;
-    //private static ArrayList<PCB> round_robin_2 = new ArrayList();
 
-    private Scheduler {
-        dumb_schedual = new ArrayList();
-        time_adjustment = 0;
-    }
 
-    public static Scheduler getInstance(){
-        return instance;
-    }
 
     public static void insertPCB(PCB to_insert){
         dumb_schedual.add(to_insert);
@@ -53,7 +55,7 @@ public class Scheduler {
         return time_adjustment + CPU.getClock();
     }
 
-    publiv static void setCPUTime(long new_time_adjustment){
+    public static void setCPUTime(long new_time_adjustment){
         time_adjustment = new_time_adjustment;
     }
 }
