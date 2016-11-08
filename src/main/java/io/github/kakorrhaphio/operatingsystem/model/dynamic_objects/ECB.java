@@ -5,6 +5,7 @@ package io.github.kakorrhaphio.operatingsystem.model.dynamic_objects;
  */
 public class ECB {
     public int priority;
+    public String event;
     public ECB(int priority_in){
         this.priority = priority_in;
     }

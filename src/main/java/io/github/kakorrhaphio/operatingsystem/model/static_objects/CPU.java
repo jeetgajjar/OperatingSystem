@@ -19,8 +19,8 @@ public class CPU {
 
 
     //TODO: CPU.execute()
-    public static boolean execute(PCB process, int time) {
-        //boolean io = process.exec(time);
+    public static boolean execute(PCB process, int cycles) {
+        //boolean io = process.exec(cycles);
         //return io;
         return true;
     }
