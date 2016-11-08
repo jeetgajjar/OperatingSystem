@@ -1,4 +1,6 @@
-package io.github.kakorrhaphio.operatingsystem.model;
+package io.github.kakorrhaphio.operatingsystem.model.static_objects;
+
+import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,7 @@ public class Scheduler {
         return instance;
     }
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
+
 
     /*TODO
     insertPCB()

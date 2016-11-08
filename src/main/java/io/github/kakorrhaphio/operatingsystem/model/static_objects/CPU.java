@@ -1,4 +1,6 @@
-package io.github.kakorrhaphio.operatingsystem.model;
+package io.github.kakorrhaphio.operatingsystem.model.static_objects;
+
+import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
 
 /**
  * Created by class on 10/13/16.
