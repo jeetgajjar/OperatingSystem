@@ -9,6 +9,14 @@ import java.util.PriorityQueue;
  * Created by class on 10/13/16.
  */
 public class ExecutionQueue {
+
+
+
+    //Round robin!
+
+
+
+
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * *
     private static PriorityQueue<PCB> queue;
     private static ExecutionQueue instance = new ExecutionQueue();
