@@ -8,20 +8,11 @@ import io.github.kakorrhaphio.operatingsystem.view.Log;
  * Created by JuliusCeasar on 11/7/2016.
  */
 public class ECB {
-
-    public static final int IO_INTERUPT = 1;
-    public static final int YIELD_INTERRUPT = 2;
-
     public int eID;
     public int event;
     public PCB process;
 
-    /**
-     *
-     * @param id
-     * @param event
-     * @param process
-     */
+
     public ECB(int id, int event, PCB process){
         this.eID = id;
         this.event = event;

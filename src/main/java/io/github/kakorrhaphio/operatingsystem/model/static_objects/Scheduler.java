@@ -8,7 +8,6 @@ import java.util.ArrayList;
  * Created by class on 10/13/16.
  */
 public class Scheduler {
-    public static final int MEMORY_LIMIT = 256000;
 
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     private static ArrayList<PCB> dumb_schedule_ready;

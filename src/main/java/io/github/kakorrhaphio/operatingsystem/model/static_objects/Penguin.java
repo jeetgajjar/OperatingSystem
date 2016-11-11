@@ -32,18 +32,27 @@ public class Penguin {
 
     }
 
+    //TODO: log time that a particular process runs, ie get cpu time before and after each execution
     private static void loopTillCycle(int number_of_cycles){
         int count = 0;
         while(count < number_of_cycles){
             // call scheduler to build execution queue from ready queue
             // also look at wait queue
+
             Scheduler.buildExecutionQueue();
+
+            //TODO: put "build execution queue" into a pcb with kernal bit
+
 
             // iterate through round robin till empty
             PCB current_process = ExecutionQueue.deQueue();
             while(current_process != null){
                 current_process.state = PCB.RUN;
-                for(int i = 0; i < ExecutionQueue.currentCycleAllocated; i++){
+                int alloted_time = ExecutionQueue.currentCycleAllocated;
+                if (alloted_time == -1){
+                    alloted_time = current_process.cycles - current_process.current_cycle; // third stage of round robin, fifo
+                }
+                for(int i = 0; i < alloted_time; i++){
                     if(InterruptProcessor.hasInterrupt()){
                         current_process.state = PCB.READY;
                         ExecutionQueue.enQueue(current_process);
@@ -71,6 +80,7 @@ public class Penguin {
                     current_process.state = PCB.READY;
                     ExecutionQueue.enQueue(current_process);
                 }
+                ExecutionQueue.updateTimeAllocation();
                 current_process = ExecutionQueue.deQueue();
             }
         }

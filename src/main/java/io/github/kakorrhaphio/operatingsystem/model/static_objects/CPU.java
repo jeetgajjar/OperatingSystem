@@ -20,15 +20,23 @@ public class CPU {
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
-    //TODO: CPU.execute()
+    //TODO: wait(1) ?
+    // gets called by penguin
     public static void execute(PCB process) {
         process.current_cycle ++;
     }
 
+    // will return time, used for time stamp
     public static long getClock() {
+        return System.currentTimeMillis();
+    }
+
+    // will return number of milliseconds since CPU is instantiated
+    public static long getTotalRunningTime(){
         return System.currentTimeMillis() - time_zero;
     }
 
+    // returns x,  min <= x < max
     public static int random(int min, int max){
         return (int)((max - min) * Math.random() + min);
     }

@@ -18,7 +18,7 @@ public class InterruptProcessor {
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
-    public static void signalInterrupt(){
+    public static void signalInterrupt(int buffer_size){
         interrupt = true;
     }
 

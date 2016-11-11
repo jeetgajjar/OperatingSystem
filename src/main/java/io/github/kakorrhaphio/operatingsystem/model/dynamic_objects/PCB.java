@@ -1,52 +1,65 @@
 package io.github.kakorrhaphio.operatingsystem.model.dynamic_objects;
 
+import io.github.kakorrhaphio.operatingsystem.view.Log;
+import io.github.kakorrhaphio.operatingsystem.view.V;
+
+import java.util.concurrent.Callable;
+
 /**
  * Created by JuliusCeasar on 11/7/2016.
  */
 
 //TODO: implement ageing <- scheduling algorithms
 public class PCB {
-    public static final int NEW = 0;
-    public static final int READY = 1;
-    public static final int RUN = 2;
-    public static final int WAIT = 3;
-    public static final int EXIT = 4;
+    private static int pid_head = 0;
 
     public int priority;
     public int state;
     public int current_cycle;
     public int cycles;
     public int memory;
-    public int needsIO;
-    public int io_time;
+    public int io;
+    public int kernal_bit;
+    public int pid;
+    public Callable<Integer> run;
 
-    /**
-     *
-     * @param priority_in
-     * @param cycles
-     * @param memory
-     * @param io_time = the length of time that the io will need to burst,
-     * @param needs_io = clock cycle within this process that will require io if it requires io, otherwise -1
-     */
-    public PCB(int priority_in, int cycles, int memory, int io_time, int needs_io){
-        this.priority = priority_in;
+
+    public PCB(int priority, int cycles, int memory, int io, int kernel_bit, Callable<Integer> run){
+        this.pid = gen_pid(); // should outsource
+        this.priority = priority;
         this.cycles = cycles;
         this.memory = memory;
-        this.state = NEW;
+        this.state = V.NEW;
         this.current_cycle = 0;
-        this.io_time = io_time;
-        this.needsIO = needs_io;
+        this.io = io;
+        this.kernal_bit = kernel_bit;
+        this.run = run;
     }
 
-    //TODO: add rest of attributes
-    public static String toString(PCB process){
-        switch (state){
-            case PCB.NEW : return "NEW__";
-            case PCB.READY : return "READY";
-            case PCB.RUN : return "RUN__";
-            case PCB.WAIT : return "WAIT_";
-            case PCB.EXIT : return "EXIT_";
-            default: return "err!!";
+    public void run(){
+        if (this.run == null){
+            return;
         }
+        try{
+            this.run.call();
+        } catch (Exception e){
+            Log.e("PCB", "Tried running process " + Integer.toString(this.pid) + ", threw exception");
+        }
+    }
+
+    //TODO: this should be outsourced to dispatcher/threading manager/process manager
+    private static int gen_pid(){
+        pid_head ++;
+        return pid_head;
+    }
+
+    //TODO: toString outsource to process manager
+    public String toString(){
+        String out = "[";
+        out += Integer.toString(this.pid) + ";";
+        out += V.pstate(this.state) + ";";
+        out += Integer.toString(this.memory) + ";";
+        out += V.kernelbit(this.kernal_bit) + "]";
+        return out;
     }
 }

@@ -14,6 +14,7 @@ public class IOScheduler {
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
+    // called by penguin on a process that was in the cpu that now needs io
     public static void scheduleIO(PCB process_in){
         InterruptProcessor.addEvent(new ECB(
                 InterruptProcessor.gen(),ECB.IO_INTERUPT,process_in
