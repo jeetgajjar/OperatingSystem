@@ -36,30 +36,43 @@ public class Penguin {
         int count = 0;
         while(count < number_of_cycles){
             // call scheduler to build execution queue from ready queue
+            // also look at wait queue
+            Scheduler.buildExecutionQueue();
 
             // iterate through round robin till empty
             PCB current_process = ExecutionQueue.deQueue();
             while(current_process != null){
-                current_process.state = CPU.RUN;
+                current_process.state = PCB.RUN;
                 for(int i = 0; i < ExecutionQueue.currentCycleAllocated; i++){
-                    if(InterruptProcessor.interrupt){
+                    if(InterruptProcessor.hasInterrupt()){
+                        current_process.state = PCB.READY;
                         ExecutionQueue.enQueue(current_process);
-                        //TODO: perform interrupt; add cycles?
+                        count += InterruptProcessor.getEvent().run();
                         break;
                     }
                     if(count >= number_of_cycles){
+                        current_process.state = PCB.READY;
                         ExecutionQueue.enQueue(current_process);
                         break;
                     }
                     if(current_process.current_cycle >= current_process.cycles){
-                        current_process.state = CPU.
+                        current_process.state = PCB.EXIT;
+                        break;
                     }
+                    if(current_process.needsIO == current_process.current_cycle){
+                        current_process.state = PCB.WAIT;
+                        IOScheduler.scheduleIO(current_process);
+                        break;
+                    }
+                    count ++;
+                    CPU.execute(current_process);
                 }
-                current_process.state = CPU.
-                ExecutionQueue.enQueue(current_process);
+                if(current_process.state == PCB.RUN){
+                    current_process.state = PCB.READY;
+                    ExecutionQueue.enQueue(current_process);
+                }
                 current_process = ExecutionQueue.deQueue();
             }
         }
     }
-
 }

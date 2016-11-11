@@ -12,16 +12,19 @@ public class ExecutionQueue {
 
 
 
-    //Round robin!
+    //TODO: Round robin!
 
 
 
 
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    public static int currentCycleAllocated;
     private static PriorityQueue<PCB> queue;
     private static ExecutionQueue instance = new ExecutionQueue();
     private ExecutionQueue(){
+        //round robin size 10 with 10 cycles per process
         queue = new PriorityQueue<>(10, new PCBComparator());
+        currentCycleAllocated = 10;
     }
     public static ExecutionQueue getInstance(){ return instance; }
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -31,6 +34,9 @@ public class ExecutionQueue {
     }
 
     public static PCB deQueue(){
+        if(queue.isEmpty()){
+            return null;
+        }
         return queue.poll();
     }
 }

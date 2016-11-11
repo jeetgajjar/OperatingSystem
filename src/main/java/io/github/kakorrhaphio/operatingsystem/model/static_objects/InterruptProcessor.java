@@ -6,24 +6,24 @@ import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.ECB;
  * Created by class on 10/13/16.
  */
 public class InterruptProcessor {
-    //TODO: add interupt/signal values
-    public static final int SIGKILL = 1;
-    public static final int IO_INTERRUPT = 2;
-
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    private static boolean interrupt;
+    private static int id_head;
     private static InterruptProcessor instance = new InterruptProcessor();
-    private InterruptProcessor(){}
+    private InterruptProcessor(){
+        interrupt = false;
+        id_head = 0;
+    }
     public static InterruptProcessor getInstance(){ return instance; }
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    /*TODO
-    signalInterrupt()
-    addEvent()
-    getEvent()
-     */
 
-    public static void signalInterrupt(int signal){
-        addEvent( new ECB(signal));
+    public static void signalInterrupt(){
+        interrupt = true;
+    }
+
+    public static boolean hasInterrupt(){
+        return interrupt;
     }
 
     public static void addEvent(ECB event_in){
@@ -33,4 +33,11 @@ public class InterruptProcessor {
     public static ECB getEvent(){
         return EventQueue.deQueue();
     }
+
+    // generate new eid
+    public static int gen(){
+        id_head ++;
+        return id_head;
+    }
+
 }

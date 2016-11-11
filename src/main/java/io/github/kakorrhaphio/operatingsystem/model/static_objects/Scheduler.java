@@ -12,16 +12,14 @@ public class Scheduler {
 
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     private static ArrayList<PCB> dumb_schedule_ready;
-    private static ArrayList<PCB> getDumb_schedule_wait;
+    private static ArrayList<PCB> dumb_schedule_wait;
     private static long time_adjustment;
     private static int memory_usage_size;
-    private static ArrayList<String> memory_stats;
     private static Scheduler instance = new Scheduler();
     private Scheduler() {
         dumb_schedule_ready = new ArrayList();
         time_adjustment = 0;
         memory_usage_size = 0;
-        memory_stats = new ArrayList<>();
     }
     public static Scheduler getInstance(){
         return instance;
@@ -30,24 +28,8 @@ public class Scheduler {
 
 
 
-
+    //TODO: all scheduling
     public static boolean insertPCB(PCB to_insert){
-        if(dumb_schedule_ready.contains(to_insert)){
-            return false;
-        }
-
-        //if there is enough memory to add process, add to ready, otherwise add to wait
-        if(memory_usage_size + to_insert.memory <= MEMORY_LIMIT){
-            memory_usage_size += to_insert.memory;
-            to_insert.state = CPU.READY;
-            dumb_schedule_ready.add(to_insert);
-        }else{
-            to_insert.
-        }
-
-
-        dumb_schedule_ready.add(to_insert);
-
         return true;
     }
 
@@ -97,9 +79,6 @@ public class Scheduler {
         return memory_usage_size;
     }
 
-    public static ArrayList<String> getMemory_stats(){
-        return memory_stats;
-    }
 
     /*TODO
     getArrival()
