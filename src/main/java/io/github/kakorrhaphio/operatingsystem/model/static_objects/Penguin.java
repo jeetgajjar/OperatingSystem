@@ -1,5 +1,7 @@
 package io.github.kakorrhaphio.operatingsystem.model.static_objects;
 
+import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
+
 /**
  * Created by class on 10/13/16.
  */
@@ -21,7 +23,7 @@ public class Penguin {
         if(cycles == 0){
             loopTillEnd();
         }else{
-            leepTillCycle(cycles);
+            loopTillCycle(cycles);
         }
         return;
     }
@@ -30,5 +32,34 @@ public class Penguin {
 
     }
 
+    private static void loopTillCycle(int number_of_cycles){
+        int count = 0;
+        while(count < number_of_cycles){
+            // call scheduler to build execution queue from ready queue
+
+            // iterate through round robin till empty
+            PCB current_process = ExecutionQueue.deQueue();
+            while(current_process != null){
+                current_process.state = CPU.RUN;
+                for(int i = 0; i < ExecutionQueue.currentCycleAllocated; i++){
+                    if(InterruptProcessor.interrupt){
+                        ExecutionQueue.enQueue(current_process);
+                        //TODO: perform interrupt; add cycles?
+                        break;
+                    }
+                    if(count >= number_of_cycles){
+                        ExecutionQueue.enQueue(current_process);
+                        break;
+                    }
+                    if(current_process.current_cycle >= current_process.cycles){
+                        current_process.state = CPU.
+                    }
+                }
+                current_process.state = CPU.
+                ExecutionQueue.enQueue(current_process);
+                current_process = ExecutionQueue.deQueue();
+            }
+        }
+    }
 
 }
