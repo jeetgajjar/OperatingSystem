@@ -18,72 +18,57 @@ public class ExecutionQueue {
     private static final int FIRST_ROBIN_AGE_LIMIT = 100;
 
     //TODO: include seperate kernal queue
+    //TODO: make algorithm more stages
 
 
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    public static int currentCycleAllocated;
     private static ArrayList<PCB> robin_user; //three stages, short rr, long rr, fifo
-    private static ArrayList<PCB> robin_kernal; // always fifo
     private static int robin_age;
     private static ExecutionQueue instance = new ExecutionQueue();
     private ExecutionQueue(){}
     public static ExecutionQueue getInstance(){ return instance; }
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    // build robin from priotity queue
+    // build robin from priotity queue,
+    // cleans ready
     public static void build(PriorityQueue<PCB> ready, boolean kernal){
-        ArrayList<PCB> new_robin = new ArrayList();
+        ArrayList<PCB> robin_user = new ArrayList();
         while(!ready.isEmpty()){
-            new_robin.add(ready.poll());
+            robin_user.add(ready.poll());
         }
         robin_age = 0;
-        updateTimeAllocation();
     }
 
 
-    public static void enQueue(PCB to_add, boolean kernal){
-        if (kernal){
-            if (robin_kernal == null){
-                Log.e("ExecutionQueue","Attempting to enqueue to a null Kernal Execution Queue");
-                return;
-            }
-            robin_kernal.add(to_add);
-        }else{
-            if (robin_user == null){
-                Log.e("ExecutionQueue","Attempting to enqueue to a null Kernal Execution Queue");
-                return;
-            }
-            robin_user.add(to_add);
+    public static void enQueue(PCB to_add){
+        if (robin_user == null){
+            Log.e("ExecutionQueue","Attempting to enqueue to a null Kernal Execution Queue");
+            return;
         }
+        robin_user.add(to_add);
     }
 
     public static PCB deQueue(){
-        if (robin == null){
+        if (robin_user == null){
             Log.e("ExecutionQueue","Attempting to dequeue from an empty Execution Queue");
             return null;
         }
-        if (robin.isEmpty()){
+        if (robin_user.isEmpty()){
             Log.i("ExecutionQueue","Execution Queue is empty, deleting instance");
-            robin = null;
+            robin_user = null;
             return null;
         }
-        return robin.remove(0);
+        return robin_user.remove(0);
     }
 
-    public static void updateTimeAllocation() {
-        // need to detirmine when to change current cycle allocated based on robin age, and robin size
-        /**
-        if (robin.size() > FIRST_ROBIN_SIZE_LIMIT) {
-            if (robin_age > FIRST_ROBINT_AGE_LIMIT){
-
-            }
-            return;
-        }else if (robin.size() > SECOND_ROBIN_LIMIT){
-            currentCycleAllocated = 20;
-            return;
-        }else{
-            currentCycleAllocated = -1;
+    // this makes the execution algorithm two stage...
+    // first stage is round robin with 10 cycles per process
+    // second stage is "fifo", -1 means complete process till finish
+    public static int cycleAllocation(int current_process_cycles) {
+        if (robin_user.size() < FIRST_ROBIN_SIZE_LIMIT || robin_age > FIRST_ROBIN_AGE_LIMIT){
+            return current_process_cycles;
+        } else{
+            return 10;
         }
-         */
     }
 }

@@ -3,6 +3,7 @@ package io.github.kakorrhaphio.operatingsystem.model.dynamic_objects;
 import io.github.kakorrhaphio.operatingsystem.model.static_objects.IOBurst;
 import io.github.kakorrhaphio.operatingsystem.model.static_objects.IOScheduler;
 import io.github.kakorrhaphio.operatingsystem.view.Log;
+import io.github.kakorrhaphio.operatingsystem.view.V;
 
 /**
  * Created by JuliusCeasar on 11/7/2016.
@@ -20,9 +21,9 @@ public class ECB {
     }
     public int run(){
         switch (this.event){
-            case IO_INTERUPT :
+            case V.IO_INTERRUPT :
                 return IOScheduler.startIO(this.process);
-            case YIELD_INTERRUPT :
+            case V.YIELD_INTERRUPT :
                 Log.i("ECB","Performed yield interrupt, cycles= 1");
                 return 1;
             default:

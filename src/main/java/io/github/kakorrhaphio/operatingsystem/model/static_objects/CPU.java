@@ -19,11 +19,9 @@ public class CPU {
     }
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
-    //TODO: wait(1) ?
     // gets called by penguin
     public static void execute(PCB process) {
-        process.current_cycle ++;
+        process.cycles_left --;
     }
 
     // will return time, used for time stamp

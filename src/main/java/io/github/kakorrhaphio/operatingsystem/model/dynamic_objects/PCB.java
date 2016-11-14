@@ -15,11 +15,11 @@ public class PCB {
 
     public int priority;
     public int state;
-    public int current_cycle;
     public int cycles;
+    public int cycles_left;
     public int memory;
     public int io;
-    public int kernal_bit;
+    public int kernel_bit;
     public int pid;
     public Callable<Integer> run;
 
@@ -30,9 +30,9 @@ public class PCB {
         this.cycles = cycles;
         this.memory = memory;
         this.state = V.NEW;
-        this.current_cycle = 0;
+        this.cycles_left = cycles;
         this.io = io;
-        this.kernal_bit = kernel_bit;
+        this.kernel_bit = kernel_bit;
         this.run = run;
     }
 
@@ -43,7 +43,7 @@ public class PCB {
         try{
             this.run.call();
         } catch (Exception e){
-            Log.e("PCB", "Tried running process " + Integer.toString(this.pid) + ", threw exception");
+            Log.e("PCB", "Tried running process " + Integer.toString(this.pid) + ", callable threw exception");
         }
     }
 
@@ -59,7 +59,7 @@ public class PCB {
         out += Integer.toString(this.pid) + ";";
         out += V.pstate(this.state) + ";";
         out += Integer.toString(this.memory) + ";";
-        out += V.kernelbit(this.kernal_bit) + "]";
+        out += V.kernelbit(this.kernel_bit) + "]";
         return out;
     }
 }

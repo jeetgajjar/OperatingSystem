@@ -8,15 +8,14 @@ import java.util.PriorityQueue;
 /**
  * Created by class on 10/13/16.
  */
-public class ReadyQueue {
+public class WaitQueue {
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    public static int currentCycleAllocated;
     private static PriorityQueue<PCB> queue;
-    private static ReadyQueue instance = new ReadyQueue();
-    private ReadyQueue(){
+    private static WaitQueue instance = new WaitQueue();
+    private WaitQueue(){
         queue = new PriorityQueue<>(10, new PCBComparator());
     }
-    public static ReadyQueue getInstance(){ return instance; }
+    public static WaitQueue getInstance(){ return instance; }
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
     public static void enQueue(PCB to_add){
