@@ -18,7 +18,7 @@ public class IOScheduler {
     // called by penguin on a process that was in the cpu that now needs io
     public static void scheduleIO(PCB process_in){
         InterruptProcessor.addEvent(new ECB(
-                InterruptProcessor.gen(), V.IO_INTERRUPT,process_in
+                InterruptProcessor.gen(), V.IO_INTERRUPT,process_in, 4
         ));
     }
 
@@ -32,7 +32,7 @@ public class IOScheduler {
         if(burst < 0){
             //IO failure, add event back to queue
             InterruptProcessor.addEvent(new ECB(
-                    InterruptProcessor.gen(),V.IO_INTERRUPT,process_in
+                    InterruptProcessor.gen(),V.IO_INTERRUPT,process_in, 4
             ));
             return -1 * burst;
         }

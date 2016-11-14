@@ -12,12 +12,14 @@ public class ECB {
     public int eID;
     public int event;
     public PCB process;
+    public int priority;
 
 
-    public ECB(int id, int event, PCB process){
+    public ECB(int id, int event, PCB process, int priority){
         this.eID = id;
         this.event = event;
         this.process = process;
+        this.priority = priority;
     }
     public int run(){
         switch (this.event){

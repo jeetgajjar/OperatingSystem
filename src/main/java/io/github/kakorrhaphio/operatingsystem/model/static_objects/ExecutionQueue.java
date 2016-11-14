@@ -31,12 +31,21 @@ public class ExecutionQueue {
 
     // build robin from priotity queue,
     // cleans ready
-    public static void build(PriorityQueue<PCB> ready, boolean kernal){
-        ArrayList<PCB> robin_user = new ArrayList();
-        while(!ready.isEmpty()){
-            robin_user.add(ready.poll());
+    public static int build(){
+        if (robin_user != null) {
+            Log.e("ExectutionQueue","Attempting to build execution queue from ready queue while execution queue is non-empty");
+            return 0;
+        }
+        robin_user = new ArrayList();
+        int count = 0;
+        PCB temp = ReadyQueue.deQueue();
+        while(temp != null){
+            robin_user.add(temp);
+            count ++;
+            temp = ReadyQueue.deQueue();
         }
         robin_age = 0;
+        return count;
     }
 
 
@@ -63,12 +72,19 @@ public class ExecutionQueue {
 
     // this makes the execution algorithm two stage...
     // first stage is round robin with 10 cycles per process
-    // second stage is "fifo", -1 means complete process till finish
+    // second stage is "fifo", complete process till finish
     public static int cycleAllocation(int current_process_cycles) {
         if (robin_user.size() < FIRST_ROBIN_SIZE_LIMIT || robin_age > FIRST_ROBIN_AGE_LIMIT){
             return current_process_cycles;
         } else{
             return 10;
         }
+    }
+
+    public static Object[] printingArray(){
+        if (robin_user == null){
+            return null;
+        }
+        return robin_user.toArray();
     }
 }

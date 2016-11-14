@@ -1,6 +1,7 @@
 package io.github.kakorrhaphio.operatingsystem.model.static_objects;
 
 import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
+import io.github.kakorrhaphio.operatingsystem.view.Log;
 import io.github.kakorrhaphio.operatingsystem.view.V;
 
 import java.util.ArrayList;
@@ -11,15 +12,10 @@ import java.util.ArrayList;
 public class Scheduler {
 
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    private static ArrayList<PCB> dumb_schedule_ready;
-    private static ArrayList<PCB> dumb_schedule_wait;
     private static long time_adjustment;
-    private static int memory_usage_size;
     private static Scheduler instance = new Scheduler();
     private Scheduler() {
-        dumb_schedule_ready = new ArrayList();
         time_adjustment = 0;
-        memory_usage_size = 0;
     }
     public static Scheduler getInstance(){
         return instance;
@@ -27,37 +23,23 @@ public class Scheduler {
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
 
-    public static boolean insertPCB(PCB to_insert){
-        // TODO: insert into CPU or into ready/wait queue?
+    public static void insertPCB(PCB to_insert){
+        // TODO: insert into CPU or into ready/wait queue? this method seems unecessary
+        // if all this method does is insert a pre-built pcb into the ready/wait queue,
+
+        // Ready Queue takes care of memory usage
+        ReadyQueue.enQueue(to_insert);
+    }
+
+    public static PCB removePCB(){
+        // TODO: remove from CPU or from ready/wait queue? this method seems unncessary
+        // if all this method does is remove pcb from the ready/wait queue,
+
+        return ReadyQueue.deQueue();
     }
 
 
-
-    public static boolean removePCB(PCB to_remove){
-        // TODO: remove from CPU or from ready/wait queue?
-    }
-
-    public static int getState(PCB block){
-        if(dumb_schedule_ready.contains(block)){
-            return block.state;
-        }
-        return -1;
-    }
-
-    public static boolean setState(PCB block, int state){
-        if(dumb_schedule_ready.contains(block)){
-            block.state = state;
-            return true;
-        }
-        return false;
-    }
-
-    public static int getMemory_usage_size(){
-        return memory_usage_size;
-    }
-
-
-    /*TODO
+    /*TODO Ask professor what these do
     getArrival()
 
     setArrival()
@@ -65,6 +47,10 @@ public class Scheduler {
     getWait()
 
     setWait()
+
+    getState()
+
+    setState()
      */
 
 
@@ -76,8 +62,19 @@ public class Scheduler {
         time_adjustment = new_time_adjustment;
     }
 
+    private static void buildReadyFromWaitQueue(){
+        int number_moved = ReadyQueue.build();
+        Log.i("Scheduler","Moved " + Integer.toString(number_moved) + " waiting processes to ready queue");
+    }
+
+    private static void buildExecutionFromReadyQueue(){
+        int number_moved = ExecutionQueue.build();
+        Log.i("Scheduler", "Moved " + Integer.toString(number_moved) + " ready processes to execution queue");
+    }
+
     //TODO: log time that a particular process runs, ie get cpu time before and after each execution
-    private static void runForNumberOfCycles(int number_of_cycles){
+    public static void runForNumberOfCycles(int number_of_cycles){
+        System.out.println("in scheduler number cycles");
         int count = 0;
         while(!(count >= number_of_cycles || (ReadyQueue.isEmpty() && WaitQueue.isEmpty()))){
             // call scheduler to build execution queue from ready queue
@@ -128,7 +125,8 @@ public class Scheduler {
     }
 
     //TODO: log time that a particular process runs, ie get cpu time before and after each execution
-    private static void runTillEnd(){
+    public static void runTillEnd(){
+        System.out.println("in scheduler till end");
         while(!(ReadyQueue.isEmpty() && WaitQueue.isEmpty())){
             // call scheduler to build execution queue from ready queue
             // also look at wait queue

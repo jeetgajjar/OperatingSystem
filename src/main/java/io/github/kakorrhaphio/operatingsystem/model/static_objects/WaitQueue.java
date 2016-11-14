@@ -22,6 +22,19 @@ public class WaitQueue {
         queue.add(to_add);
     }
 
+    // will only dequeue if there is enough memory to add current block
+    // TODO: add second priority queue that sorts by size, then it could add small (less important blocks)
+    public static PCB deQueue(int free_memory){
+        if (isEmpty()) {
+            return null;
+        }
+        PCB temp = queue.peek();
+        if (temp.memory > free_memory) {
+            return null;
+        }
+        return queue.poll();
+    }
+
     public static PriorityQueue<PCB> getQueue(){
         return queue;
     }

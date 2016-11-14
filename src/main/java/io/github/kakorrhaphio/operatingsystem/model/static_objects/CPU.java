@@ -22,6 +22,7 @@ public class CPU {
     // gets called by penguin
     public static void execute(PCB process) {
         process.cycles_left --;
+        process.run();
     }
 
     // will return time, used for time stamp
