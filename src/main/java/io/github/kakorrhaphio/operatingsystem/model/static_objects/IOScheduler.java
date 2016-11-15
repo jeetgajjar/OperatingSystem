@@ -38,4 +38,8 @@ public class IOScheduler {
         }
         return 0;
     }
+
+    public static void clean(){
+        // nothing
+    }
 }

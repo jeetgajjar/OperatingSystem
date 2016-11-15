@@ -23,6 +23,7 @@ public class _START_BUTTON_ {
 
     private static void runInTerminal(){
         //TODo: change the name of command interface to terminal, to differentiat it from fx
+        Log.setLogging();
         CommandInterface.start();
     }
 }

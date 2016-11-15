@@ -33,7 +33,7 @@ public class ExecutionQueue {
     // cleans ready
     public static int build(){
         if (robin_user != null) {
-            Log.e("ExectutionQueue","Attempting to build execution queue from ready queue while execution queue is non-empty");
+            Log.e("ExecutionQueue","Attempting to build execution queue from ready queue while execution queue is non-empty");
             return 0;
         }
         robin_user = new ArrayList();
@@ -75,6 +75,7 @@ public class ExecutionQueue {
     // second stage is "fifo", complete process till finish
     public static int cycleAllocation(int current_process_cycles) {
         if (robin_user.size() < FIRST_ROBIN_SIZE_LIMIT || robin_age > FIRST_ROBIN_AGE_LIMIT){
+
             return current_process_cycles;
         } else{
             return 10;
@@ -86,5 +87,9 @@ public class ExecutionQueue {
             return null;
         }
         return robin_user.toArray();
+    }
+
+    public static void clean(){
+        robin_user = null;
     }
 }

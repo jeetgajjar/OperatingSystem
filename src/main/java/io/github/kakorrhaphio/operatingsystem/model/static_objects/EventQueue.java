@@ -25,4 +25,8 @@ public class EventQueue {
     public static ECB deQueue(){
         return queue.poll();
     }
+
+    public static void clean(){
+        queue = new PriorityQueue<>(10, new ECBComparator());
+    }
 }

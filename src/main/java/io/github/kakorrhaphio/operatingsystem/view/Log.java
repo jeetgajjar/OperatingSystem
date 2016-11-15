@@ -6,15 +6,11 @@ import java.util.Date;
  * Created by JuliusCeasar on 11/10/2016.
  */
 public class Log {
-    private static Log instance = null;
+    private static Log instance = new Log();
     private static boolean logging = false;
-    private static Date date;
+    private static Date date = new Date();
     private Log(){}
     public static Log getInstance(){
-        if (instance == null){
-            instance = new Log();
-            date = new Date();
-        }
         return instance;
     }
 
@@ -24,12 +20,12 @@ public class Log {
 
     public static void i(String tag, String message){
         if (logging) {
-            System.out.println(date.toString() + " :: Info :: " + tag + " : " + message);
+            System.out.println(date.toString() + " :::  INFO  ::: " + tag + " : " + message);
         }
     }
     public static void e(String tag, String message){
         if (logging) {
-            System.out.println(date.toString() + " ::ERROR!:: " + tag + " : " + message);
+            System.out.println(date.toString() + " ::: ERROR! ::: " + tag + " : " + message);
         }
     }
 }

@@ -40,5 +40,8 @@ public class CPU {
         return (int)((max - min) * Math.random() + min);
     }
 
+    public static void clean(){
+        time_zero = System.currentTimeMillis();
+    }
 
 }

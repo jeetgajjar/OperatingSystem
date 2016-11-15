@@ -74,15 +74,12 @@ public class Scheduler {
 
     //TODO: log time that a particular process runs, ie get cpu time before and after each execution
     public static void runForNumberOfCycles(int number_of_cycles){
-        System.out.println("in scheduler number cycles");
         int count = 0;
         while(!(count >= number_of_cycles || (ReadyQueue.isEmpty() && WaitQueue.isEmpty()))){
             // call scheduler to build execution queue from ready queue
             // also look at wait queue
-
             buildReadyFromWaitQueue();
             buildExecutionFromReadyQueue();
-
             //TODO: put "build execution queue" into a pcb with kernal bit
 
 
@@ -126,14 +123,11 @@ public class Scheduler {
 
     //TODO: log time that a particular process runs, ie get cpu time before and after each execution
     public static void runTillEnd(){
-        System.out.println("in scheduler till end");
         while(!(ReadyQueue.isEmpty() && WaitQueue.isEmpty())){
             // call scheduler to build execution queue from ready queue
             // also look at wait queue
-
             buildReadyFromWaitQueue();
             buildExecutionFromReadyQueue();
-
             //TODO: put "build execution queue" into a pcb with kernal bit
 
             // iterate through round robin till empty
@@ -147,10 +141,6 @@ public class Scheduler {
                         ExecutionQueue.enQueue(current_process);
                         break;
                     }
-                    if(current_process.cycles_left == 0){
-                        current_process.state = V.EXIT;
-                        break;
-                    }
                     if(current_process.io == current_process.cycles_left){
                         current_process.state = V.WAIT;
                         IOScheduler.scheduleIO(current_process);
@@ -158,13 +148,21 @@ public class Scheduler {
                     }
                     CPU.execute(current_process);
                 }
-                if(current_process.state == V.RUN){
+                if(current_process.cycles_left == 0){
+                    current_process.state = V.EXIT;
+                }else if(current_process.state == V.RUN){
                     current_process.state = V.READY;
                     ExecutionQueue.enQueue(current_process);
                 }
                 current_process = ExecutionQueue.deQueue();
             }
         }
+    }
+
+    public static void clean(){
+        time_adjustment = 0;
+        // clean pcb pid generator
+        PCB.pid_head = 0;
     }
 
 }

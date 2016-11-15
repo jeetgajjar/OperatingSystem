@@ -40,4 +40,8 @@ public class InterruptProcessor {
         return id_head;
     }
 
+    public static void clean(){
+        interrupt = false;
+        id_head = 0;
+    }
 }

@@ -33,4 +33,8 @@ public class IOBurst {
         Log.i("IOBurst","Performed IO Burst, cycles= " + Integer.toString(rTime));
         return rTime;
     }
+
+    public static void clean(){
+        // nothing
+    }
 }

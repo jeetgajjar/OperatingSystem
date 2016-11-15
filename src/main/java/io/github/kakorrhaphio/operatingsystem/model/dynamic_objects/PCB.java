@@ -11,7 +11,7 @@ import java.util.concurrent.Callable;
 
 //TODO: implement ageing <- scheduling algorithms
 public class PCB {
-    private static int pid_head = 0;
+    public static int pid_head = 0;
 
     public int priority;
     public int state;
@@ -43,7 +43,7 @@ public class PCB {
         try{
             this.run.call();
         } catch (Exception e){
-            Log.e("PCB", "Tried running process " + Integer.toString(this.pid) + ", callable threw exception");
+            Log.e("PCB", "Tried running process " + Integer.toString(this.pid) + ", callable threw exception\n" + e.toString());
         }
     }
 

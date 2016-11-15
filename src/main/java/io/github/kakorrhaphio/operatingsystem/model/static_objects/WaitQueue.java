@@ -43,4 +43,8 @@ public class WaitQueue {
         return queue.isEmpty();
     }
 
+    public static void clean(){
+        queue = new PriorityQueue<>(10, new PCBComparator());
+    }
+
 }

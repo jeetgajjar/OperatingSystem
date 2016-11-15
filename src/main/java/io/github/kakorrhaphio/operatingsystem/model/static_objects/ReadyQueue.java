@@ -28,9 +28,11 @@ public class ReadyQueue {
     // cleans ready
     public static int build(){
         int count = 0;
+        FREE_MEMORY = V.MEMORY_LIMIT;
         PCB temp = WaitQueue.deQueue(FREE_MEMORY);
         while(temp != null){
             FREE_MEMORY -= temp.memory;
+            temp.state = V.READY;
             queue.add(temp);
             count ++;
             temp = WaitQueue.deQueue(FREE_MEMORY);
@@ -41,8 +43,11 @@ public class ReadyQueue {
     // Takes care of memory usage
     public static void enQueue(PCB to_add){
         if (to_add.memory <= FREE_MEMORY) {
+            FREE_MEMORY -= to_add.memory;
+            to_add.state = V.READY;
             queue.add(to_add);
         } else {
+            to_add.state = V.WAIT;
             WaitQueue.enQueue(to_add);
         }
     }
@@ -66,4 +71,8 @@ public class ReadyQueue {
         return queue.isEmpty();
     }
 
+    public static void clean(){
+        FREE_MEMORY = V.MEMORY_LIMIT;
+        queue = new PriorityQueue<>(10, new PCBComparator());
+    }
 }
