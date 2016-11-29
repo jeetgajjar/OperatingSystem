@@ -1,7 +1,4 @@
-package io.github.kakorrhaphio.operatingsystem.model.static_objects;
-
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.ECB;
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
+package sample;
 
 import java.util.ArrayList;
 
@@ -22,30 +19,22 @@ public class EventQueue {
         queue.add(to_add);
     }
 
-    public static void deQueue(ECB to_remove){
-        queue.remove(to_remove);
+    public static ECB deQueue(){
+        return queue.remove(0);
     }
 
-    public static ECB has_timer () {
-        ECB to_return = null;
-        for (int i = 0; i < queue.size(); i ++) {
-            if (System.currentTimeMillis() >=  queue.get(i).time) {
-                to_return = queue.get(i);
-                deQueue(to_return);
-                break;
-            }
-        }
-        return to_return;
+    public static Object[] get_processes(){
+        return queue.toArray();
     }
 
     public static String printing(){
         if (queue.isEmpty()){
-            return null;
+            return "";
         }
         Object[] arr =  queue.toArray();
         String output = "";
         for (int i = 0; i < arr.length; i ++) {
-            output += ProcessManager.toString((PCB)arr[i]) + "\n";
+            output += EventManager.toString((ECB)arr[i]) + "\n";
         }
         return output;
     }

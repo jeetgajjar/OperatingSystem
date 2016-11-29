@@ -1,8 +1,4 @@
-package io.github.kakorrhaphio.operatingsystem.model.static_objects;
-
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.ECB;
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
-import io.github.kakorrhaphio.operatingsystem.view.V;
+package sample;
 
 /**
  * Created by class on 10/13/16.
@@ -18,7 +14,7 @@ public class IOScheduler {
 
 
     // called by penguin on a process that was in the cpu that now needs io
-    public static void scheduleIO(PCB process_in, int time){
+    public static void scheduleIO (PCB process_in, int time) {
         InterruptProcessor.addEvent(EventManager.new_IO_event(process_in,time));
     }
 

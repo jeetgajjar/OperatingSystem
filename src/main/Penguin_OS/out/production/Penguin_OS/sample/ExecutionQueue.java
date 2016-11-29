@@ -1,12 +1,7 @@
-package io.github.kakorrhaphio.operatingsystem.model.static_objects;
+package sample;
 
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCBComparator;
-import io.github.kakorrhaphio.operatingsystem.view.Log;
 
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 /**
  * Created by class on 10/13/16.
@@ -24,32 +19,44 @@ public class ExecutionQueue {
 
 
     // Singleton * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    private static ArrayList<PCB> robin_user; //three stages, short rr, long rr, fifo
-    private static int robin_age;
+    private static ArrayList<PCB> robin_user = new ArrayList<>(); //three stages, short rr, long rr, fifo
+    private static int robin_age = 0;
     private static ExecutionQueue instance = new ExecutionQueue();
     private ExecutionQueue(){}
     public static ExecutionQueue getInstance(){ return instance; }
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    public static void enQueue(PCB to_add){
-        if (robin_user == null){
-            Log.i("ExecutionQueue","Attempting to enqueue to a null Execution Queue");
-            robin_user = new ArrayList<>();
+    public static void build() {
+        PCB cur = WaitQueue.deQueue();
+        while (cur != null) {
+            enQueue(cur);
+            cur = WaitQueue.deQueue();
         }
-        robin_user.add(to_add);
+    }
+
+    public static void enQueue(PCB to_add){
+        if (to_add.state == ProcessManager.WAIT || to_add.state == ProcessManager.NEW) {
+            to_add.state = ProcessManager.READY;
+            robin_user.add(to_add);
+        } else if (to_add.state == ProcessManager.EXIT) {
+            MemoryManager.remove_process(to_add.memory_head);
+        }
     }
 
     public static PCB deQueue(){
-        if (robin_user == null){
-            Log.e("ExecutionQueue","Attempting to dequeue from an empty Execution Queue");
-            return null;
+        if (isEmpty()){
+            build();
+            if (isEmpty()) {
+                return null;
+            }
         }
-        if (robin_user.isEmpty()){
-            Log.i("ExecutionQueue","Execution Queue is empty, deleting instance");
-            robin_user = null;
-            return null;
-        }
-        return robin_user.remove(0);
+        PCB temp = robin_user.remove(0);
+        temp.state = ProcessManager.RUN;
+        return temp;
+    }
+
+    public static Object[] get_processes(){
+        return robin_user.toArray();
     }
 
     // this makes the execution algorithm two stage...
@@ -66,7 +73,7 @@ public class ExecutionQueue {
     }
 
     public static boolean isEmpty () {
-        if (robin_user == null || robin_user.isEmpty()) {
+        if (robin_user.isEmpty()) {
             return true;
         }
         return false;
@@ -74,7 +81,7 @@ public class ExecutionQueue {
 
     public static String printing(){
         if (robin_user == null){
-            return null;
+            return "";
         }
         Object[] arr =  robin_user.toArray();
         String output = "";
@@ -85,6 +92,6 @@ public class ExecutionQueue {
     }
 
     public static void clean(){
-        robin_user = null;
+        robin_user.clear();
     }
 }

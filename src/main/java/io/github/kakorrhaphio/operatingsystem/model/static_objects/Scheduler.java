@@ -87,6 +87,7 @@ public class Scheduler {
             PCB current_process = ExecutionQueue.deQueue();
             while(current_process != null){
                 current_process.state = V.RUN;
+
                 int robin_allocated_time = ExecutionQueue.cycleAllocation(current_process.cycles_left);
                 for(int i = 0; i < robin_allocated_time; i++){
                     if(InterruptProcessor.hasInterrupt()){
@@ -109,8 +110,7 @@ public class Scheduler {
                         IOScheduler.scheduleIO(current_process);
                         break;
                     }
-                    count ++;
-                    CPU.execute(current_process);
+                    count += CPU.execute(current_process);
                 }
                 if(current_process.state == V.RUN){
                     current_process.state = V.READY;
@@ -159,10 +159,21 @@ public class Scheduler {
         }
     }
 
+    private static void schedule_execution_queue () {
+        if (ExecutionQueue.isEmpty() && !WaitQueue.isEmpty()) {
+            PCB current = WaitQueue.deQueue();
+            if (current == null) {
+                Log.e("Scheduler","Appears that the wait queue can't add a single process to execute on build");
+            }
+            while (current != null) {
+                ExecutionQueue.enQueue(current);
+                current = WaitQueue.deQueue();
+            }
+        }
+    }
+
     public static void clean(){
         time_adjustment = 0;
-        // clean pcb pid generator
-        PCB.pid_head = 0;
     }
 
 }

@@ -1,8 +1,6 @@
-package io.github.kakorrhaphio.operatingsystem.model.dynamic_objects;
+package sample;
 
-import io.github.kakorrhaphio.operatingsystem.model.static_objects.*;
-import io.github.kakorrhaphio.operatingsystem.view.Log;
-import io.github.kakorrhaphio.operatingsystem.view.V;
+
 
 /**
  * Created by JuliusCeasar on 11/7/2016.
@@ -27,13 +25,12 @@ public class ECB {
         switch (this.event){
             case EventManager.IO_INTERRUPT :
                 IOScheduler.startIO(this.process.memory_head);
-                WaitQueue.enQueue(process);
                 return CPU.random(10,15); //cycles it takes to move io to buffer
             case EventManager.YIELD_INTERRUPT :
-                Log.i("ECB","Performed yield interrupt, cycles= 1");
+                //Log.i("ECB","Performed yield interrupt, cycles= 1");
                 return 1;
             default:
-                Log.e("ECB","When interrupt run, event is undefined --> this.event= '" + Integer.toString(this.event) + "'");
+                //Log.e("ECB","When interrupt run, event is undefined --> this.event= '" + Integer.toString(this.event) + "'");
                 return 0;
         }
     }

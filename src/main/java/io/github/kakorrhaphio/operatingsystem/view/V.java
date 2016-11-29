@@ -1,5 +1,8 @@
 package io.github.kakorrhaphio.operatingsystem.view;
 
+import static io.github.kakorrhaphio.operatingsystem.model.static_objects.EventManager.IO_INTERRUPT;
+import static io.github.kakorrhaphio.operatingsystem.model.static_objects.EventManager.YIELD_INTERRUPT;
+
 /**
  * Created by JuliusCeasar on 11/11/2016.
  *
@@ -14,16 +17,11 @@ public class V {
     public static final int WAIT = 3;
     public static final int EXIT = 4;
 
-    // Event states
-    public static final int IO_INTERRUPT = 0;
-    public static final int YIELD_INTERRUPT = 1;
 
     // Kernel bit
     public static final int USER = 0;
     public static final int KERNEL = 1;
 
-    // Memory size limit in bytes
-    public static final int MEMORY_LIMIT = 256000;
 
 
     // Process state toString

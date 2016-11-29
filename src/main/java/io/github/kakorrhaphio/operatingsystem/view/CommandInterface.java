@@ -5,15 +5,13 @@ import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
 import io.github.kakorrhaphio.operatingsystem.model.static_objects.*;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-import java.util.concurrent.Callable;
 
 /**
  * Created by class on 10/13/16.
  */
-public class CommandInterface {
+public final class CommandInterface {
     private static final int SCREEN_CLEAR = 50;
     private static final int HEADER_PADDING = 4;
     private static final int FOOTER_PADDING = 6;
@@ -22,8 +20,7 @@ public class CommandInterface {
     private static Date thisDate;
     private static String arg;
     private static Scanner in;
-    private CommandInterface() {
-    }
+    private CommandInterface () {}
     private static CommandInterface instance = new CommandInterface();
     public static CommandInterface getInstance() {
         return instance;
@@ -34,15 +31,8 @@ public class CommandInterface {
     public static void start() {
         thisDate = new Date();
         in = new Scanner(System.in);
-        newline(50);
-        System.out.println("PENGUIN");
-        System.out.println("Enter any key...");
-        System.out.println(thisDate.toString());
-        newline(3);
-        in.next();// waits till any command to go to home
+        loadScreen("NEW");
         int running = queryLoop(0);
-        // will power off in 5 minutes
-        long start = System.currentTimeMillis();
         //while intent is not turn off intent i.e(intent == -1)
         while (running >= 0) {
             System.out.println("DEBUG: cut recursion");
@@ -51,19 +41,38 @@ public class CommandInterface {
         in.close();
     }
 
+    private static void loadScreen(String p){
+        if(p.equals("NEW")){
+            newline(SCREEN_CLEAR);
+            System.out.println("PENGUIN");
+            System.out.println("Enter any key...");
+            System.out.println(thisDate.toString());
+            newline(FOOTER_PADDING);
+            in.nextLine();// waits till any command to go to home
+        }else{
+            newline(SCREEN_CLEAR);
+            System.out.println("PENGUIN");
+            System.out.println("Enter any key...");
+            System.out.println(thisDate.toString());
+            System.out.println("(reset)");
+            newline(FOOTER_PADDING - 1);
+            in.nextLine();// waits till any command to go to home
+        }
+    }
+
     public static int promptUser() {
         // clear screen
         newline(SCREEN_CLEAR);
         //HEADER
-        System.out.println(thisDate.toString());
+        //System.out.println(thisDate.toString());
         //HEADER PADDING
         newline(HEADER_PADDING);
         //BODY
         System.out.println("Welcome to the wonderful world of PENGUIN!");
         System.out.println(thisDate.toString());
         newline(FOOTER_PADDING);
-        System.out.println("PROC    MEM    LOAD    EXE    RESET    EXIT");
-        String[] temp = in.next().toUpperCase().split(" ");
+        System.out.println("[P]ROC    [M]EM    [L]OAD    [E]XE    [R]ESET    E[X]IT");
+        String[] temp = in.nextLine().toUpperCase().split(" ");
         if( temp.length == 2){
             arg = temp[1];
         } else{
@@ -72,15 +81,27 @@ public class CommandInterface {
         switch (temp[0]) {
             case "PROC":
                 return 1;
+            case "P":
+                return 1;
             case "MEM":
+                return 2;
+            case "M":
                 return 2;
             case "LOAD":
                 return 3;
+            case "L":
+                return 3;
             case "EXE":
+                return 4;
+            case "E":
                 return 4;
             case "RESET":
                 return 5;
+            case "R":
+                return 5;
             case "EXIT":
+                return 6;
+            case "X":
                 return 6;
             default:
                 return 0;
@@ -123,54 +144,44 @@ public class CommandInterface {
 
     private static void proc(){
         // clear screen
-        newline(50);
+        newline(SCREEN_CLEAR);
         // HEADER
         //System.out.println(thisDate.toString());
         //HEADER PADDING
-        newline(3);
+        newline(HEADER_PADDING);
         // BODY
+
         System.out.println("PROC * * * * * * * * * * * * * * * * * * * * *");
-        System.out.println("\n--------Ready Queue--------");
-        Object[] readyQ = ReadyQueue.printingArray();
-        if (readyQ == null || readyQ.length == 0){
-            System.out.println("!!Empty");
-        } else {
-            for (int i = 0; i < readyQ.length; i++) {
-                System.out.println(((PCB) readyQ[i]).toString());
-            }
-        }
+
         System.out.println("\n------Execution Queue------");
-        Object[] execQ = ExecutionQueue.printingArray();
-        if (execQ == null  || execQ.length == 0){
+        String execQ = ExecutionQueue.printing();
+        if (execQ.length() == 0){
             System.out.println("!!Empty");
         }else{
-            for(int i = 0; i < execQ.length; i++){
-                System.out.println(((PCB)execQ[i]).toString());
-            }
+            System.out.print(execQ);
         }
+
         System.out.println("\n------Waiting Queue------");
-        Object[] waitQ = ExecutionQueue.printingArray();
-        if (waitQ == null  || waitQ.length == 0){
+        String waitQ = WaitQueue.printing();
+        if (waitQ.length() == 0){
             System.out.println("!!Empty");
         }else{
-            for(int i = 0; i < waitQ.length; i++){
-                System.out.println(((PCB)waitQ[i]).toString());
-            }
+            System.out.print(waitQ);
         }
+
         System.out.println("\n------Event Queue------");
-        Object[] eventQ = ExecutionQueue.printingArray();
-        if (eventQ == null  || eventQ.length == 0){
+        String eventQ = EventQueue.printing();
+        if (eventQ.length() == 0){
             System.out.println("!!Empty");
         }else{
-            for(int i = 0; i < eventQ.length; i++){
-                System.out.println(((ECB)eventQ[i]).toString());
-            }
+            System.out.print(eventQ);
         }
+
         // FOOTER PADDING
         newline(3);
         // FOOTER
         System.out.println("Press any key...");
-        in.next();
+        in.nextLine();
     }
 
     private static void mem(){
@@ -199,7 +210,7 @@ public class CommandInterface {
         }
         newline(4);
         System.out.println("Enter any key...");
-        in.next();
+        in.nextLine();
     }
 
     private static void load(){
@@ -216,7 +227,7 @@ public class CommandInterface {
                 }
             }
             System.out.print("\nPlease specify the file here: ");
-            arg  = in.next();
+            arg  = in.nextLine();
         }
         try {
             BufferedReader reader = new BufferedReader(new FileReader(arg));
@@ -230,7 +241,7 @@ public class CommandInterface {
         }
         newline(4);
         System.out.println("Enter any key...");
-        in.next();
+        in.nextLine();
     }
 
     private static void exe(){
@@ -245,32 +256,19 @@ public class CommandInterface {
 
         newline(4);
         System.out.println("Enter any key...");
-        in.next();
+        in.nextLine();
     }
 
     private static void reset(){
-        newline(50);
-        // add process calls
-        System.out.println("RESETTING IN...");
-        newline(4);
-        System.out.print(Integer.toString(4));
-        for(int i = 3; i > 0; i--){
-            System.out.print("\r" + Integer.toString(i) + " seconds");
-            try{
-                Thread.sleep(1100);
-            } catch(InterruptedException e){
-
-            }
-        }
         CPU.clean();
         EventQueue.clean();
         ExecutionQueue.clean();
         InterruptProcessor.clean();
         IOBurst.clean();
         IOScheduler.clean();
-        ReadyQueue.clean();
         Scheduler.clean();
         WaitQueue.clean();
+        loadScreen("RESET");
     }
 
     private static int exit(){
@@ -278,8 +276,8 @@ public class CommandInterface {
         System.out.println("Are you sure?");
         System.out.println("YES    CANCEL");
         newline(4);
-        String command = in.next();
-        if(command.toUpperCase().equals("YES")){
+        String command = in.nextLine();
+        if(command.toUpperCase().equals("YES") || command.toUpperCase().equals("Y")){
             return -1;
         }
         return 0;
@@ -289,59 +287,54 @@ public class CommandInterface {
         try {
             String line = f.readLine();
             while ( line != null){
-                System.out.println(">>" + line);
+                System.out.print(">>" + line);
                 // parse line
                 String[] parsed = line.split(" ");
-                for (int i = 0; i < parsed.length; i++){
-                    if(parsed[i].length() > 0){
-                        //priority, cycles, memory, io, kernel_bit, Callable<Integer> run
-                        if (parsed[i].charAt(0) == '#'){
-                            break;
-                        } else if (parsed[i].charAt(0) == 'C' && parsed.length > i - 1){
-                            //CALCULATE
-                            Scheduler.insertPCB(new PCB(
-                                    4,
-                                    Integer.parseInt(parsed[i + 1]),
-                                    Integer.parseInt(parsed[i + 1]) * 100,
-                                    -1,
-                                    0,
-                                    null
-                            ));
-                            break;
-                        } else if (parsed[i].charAt(0) == 'I'){
-                            //I/O
-                            break;
-                        } else if (parsed[i].charAt(0) == 'Y'){
-                            //YIELD
-                            break;
-                        } else if (parsed[i].charAt(0) == 'O'){
-                            //OUT
-                            Scheduler.insertPCB(new PCB(
-                                    2,
-                                    1,
-                                    100,
-                                    -1,
-                                    0,
-                                    new Callable<Integer>() {
-                                        @Override
-                                        public Integer call() throws Exception {
-                                            System.out.println("Hello from inside the machine");
-                                            return 0;
-                                        }
-                                    }
-                            ));
-                            break;
-                        }
+
+                if (parsed.length > 0){
+                    // cut spaces
+                    int cur = 0;
+                    while (parsed[0].length() == 0){
+                        cur ++;
+                    }
+                    //cur points to first command
+                    switch (parsed[cur]){
+                        case "#":
+                            System.out.println();
+                        case "CALCULATE":
+                            if (parsed.length == cur + 1) {
+                                System.out.println(" <<ERROR>> No argument");
+                            } else {
+                                try {
+                                    int a = Integer.parseInt(parsed[cur + 1]);
+                                    Scheduler.insertPCB(ProcessManager.newCalculateProcess(a));
+                                } catch (Exception e) {
+                                    System.out.println(" <<ERROR>> Bad argument");
+                                }
+                            }
+                        case "OUT":
+                            Scheduler.insertPCB(ProcessManager.newOutProcess());
+                            System.out.println();
+                        case "I/O":
+                            Scheduler.insertPCB(ProcessManager.newOutProcess());
+                            System.out.println();
+                        case "YIELD":
+                            Scheduler.insertPCB(ProcessManager.newOutProcess());
+                            System.out.println();
+                        default:
+                            System.out.println( "<<ERROR>> Bad command");
                     }
                 }
-
-
                 line = f.readLine();
             }
         } catch (IOException e){
             Log.e("CommandInterface","IO Exception in interpreter");
         }
 
+    }
+
+    public static void stdout (String to_print) {
+        System.out.println(to_print);
     }
 
 }

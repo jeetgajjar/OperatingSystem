@@ -1,7 +1,4 @@
-package io.github.kakorrhaphio.operatingsystem.model.static_objects;
-
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCBComparator;
+package sample;
 
 import java.util.PriorityQueue;
 
@@ -19,7 +16,12 @@ public class WaitQueue {
     // End Singleton * * * * * * * * * * * * * * * * * * * * * * * * *
 
     public static void enQueue(PCB to_add){
+        to_add.state = ProcessManager.WAIT;
         queue.add(to_add);
+    }
+
+    public static Object[] get_processes(){
+        return queue.toArray();
     }
 
     // will only dequeue if there is enough memory to add current block
@@ -39,7 +41,7 @@ public class WaitQueue {
 
     public static String printing(){
         if (queue.isEmpty()){
-            return null;
+            return "";
         }
         Object[] arr =  queue.toArray();
         String output = "";

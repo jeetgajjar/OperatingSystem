@@ -1,9 +1,4 @@
-package io.github.kakorrhaphio.operatingsystem.model.static_objects;
-
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.ECB;
-import io.github.kakorrhaphio.operatingsystem.model.dynamic_objects.PCB;
-import io.github.kakorrhaphio.operatingsystem.view.Log;
-import io.github.kakorrhaphio.operatingsystem.view.V;
+package sample;
 
 /**
  * Created by class on 10/13/16.
